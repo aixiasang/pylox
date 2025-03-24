@@ -1,0 +1,37 @@
+// 匿名函数（Lambda）测试
+
+// 1. 基本匿名函数
+var add = fun (a, b) {
+  return a + b;
+};
+
+print "2 + 3 = " + add(2, 3);  // 输出：2 + 3 = 5
+
+// 2. 匿名函数作为参数
+fun apply(func, x, y) {
+  return func(x, y);
+}
+
+print "应用匿名函数：" + apply(fun (a, b) { return a * b; }, 4, 5);  // 输出：应用匿名函数：20
+
+// 3. 立即调用的函数表达式(IIFE)
+print "计算结果：" + fun (x) { return x * x; }(4);  // 输出：计算结果：16
+
+// 4. 闭包捕获变量
+var createAdder = fun (n) {
+  return fun (x) {
+    return x + n;
+  };
+};
+
+var add5 = createAdder(5);
+print "add5(10) = " + add5(10);  // 输出：add5(10) = 15
+
+// 5. 参数作用域测试
+fun scope(a) {
+  print "参数a: " + a;
+  var a = "local";  // 重新定义同名变量
+  print "局部变量a: " + a;
+}
+
+scope("parameter");  // 测试参数与局部变量的作用域关系

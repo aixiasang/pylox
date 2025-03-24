@@ -1,0 +1,105 @@
+// 变量访问性能基准测试
+
+// 计时函数
+fun time(title, fn) {
+  var start = clock();
+  var result = fn();
+  var end = clock();
+  print title + ": " + (end - start) + "秒";
+  return result;
+}
+
+// 测试1：大量局部变量访问
+fun localVarTest() {
+  var sum = 0;
+  
+  // 定义10个局部变量
+  var a = 1;
+  var b = 2;
+  var c = 3;
+  var d = 4;
+  var e = 5;
+  var f = 6;
+  var g = 7;
+  var h = 8;
+  var i = 9;
+  var j = 10;
+  
+  // 访问这些变量100000次
+  for (var k = 0; k < 100000; k = k + 1) {
+    sum = sum + a + b + c + d + e + f + g + h + i + j;
+  }
+  
+  return sum;
+}
+
+// 测试2：嵌套作用域中的变量访问
+fun nestedScopeTest() {
+  var sum = 0;
+  var outer = 1;
+  
+  // 创建10层嵌套作用域
+  {
+    var a = 2;
+    {
+      var b = 3;
+      {
+        var c = 4;
+        {
+          var d = 5;
+          {
+            var e = 6;
+            {
+              var f = 7;
+              {
+                var g = 8;
+                {
+                  var h = 9;
+                  {
+                    var i = 10;
+                    {
+                      var j = 11;
+                      
+                      // 访问所有变量10000次
+                      for (var k = 0; k < 10000; k = k + 1) {
+                        sum = sum + outer + a + b + c + d + e + f + g + h + i + j;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  return sum;
+}
+
+// 测试3：函数调用中的变量传递
+fun add(a, b, c, d, e) {
+  return a + b + c + d + e;
+}
+
+fun functionCallTest() {
+  var sum = 0;
+  
+  // 调用函数10000次
+  for (var i = 0; i < 10000; i = i + 1) {
+    sum = sum + add(i, i+1, i+2, i+3, i+4);
+  }
+  
+  return sum;
+}
+
+// 运行基准测试
+print "===== 变量访问性能基准测试 =====";
+time("局部变量访问测试", localVarTest);
+time("嵌套作用域变量访问测试", nestedScopeTest);
+time("函数调用变量传递测试", functionCallTest);
+print "===============================";
+
+// 这个脚本可以用于比较优化前后的性能差异
+// 运行命令：python pylox/lox.py examples/benchmark.lox

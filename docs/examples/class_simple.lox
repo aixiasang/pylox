@@ -1,0 +1,9 @@
+// 简单类测试
+class Test {
+  method() {
+    print "Method called";
+  }
+}
+
+var instance = Test();
+instance.method();

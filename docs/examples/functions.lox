@@ -1,0 +1,87 @@
+// 函数功能示例程序
+
+// 1. 基本函数定义和调用
+fun sayHello(name) {
+  print "你好, " + name + "!";
+}
+
+sayHello("世界");  // 输出: 你好, 世界!
+print "";
+
+// 2. 函数返回值
+fun add(a, b) {
+  return a + b;
+}
+
+print "5 + 3 = " + add(5, 3);  // 输出: 5 + 3 = 8
+print "";
+
+// 3. 递归函数：计算阶乘
+fun factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
+print "5的阶乘是: " + factorial(5);  // 输出: 5的阶乘是: 120
+print "";
+
+// 4. 闭包示例：函数捕获外部变量
+fun makeCounter() {
+  var count = 0;
+  fun counter() {
+    count = count + 1;
+    return count;
+  }
+  
+  return counter;
+}
+
+var counter = makeCounter();
+print "计数: " + counter();  // 输出: 计数: 1
+print "计数: " + counter();  // 输出: 计数: 2
+print "计数: " + counter();  // 输出: 计数: 3
+print "";
+
+// 5. 函数作为参数
+fun twice(f, x) {
+  return f(f(x));
+}
+
+fun addOne(n) {
+  return n + 1;
+}
+
+print "使用twice(addOne, 3): " + twice(addOne, 3);  // 输出: 使用twice(addOne, 3): 5
+print "";
+
+// 6. 内置函数: clock()
+print "当前时间(秒): " + clock();
+print "";
+
+// 7. 函数作为返回值：高阶函数
+fun makeAdder(n) {
+  fun adder(x) {
+    return x + n;
+  }
+  
+  return adder;
+}
+
+var add5 = makeAdder(5);
+print "add5(10) = " + add5(10);  // 输出: add5(10) = 15
+print "";
+
+// 8. 互递归函数
+fun isEven(n) {
+  if (n == 0) return true;
+  return isOdd(n - 1);
+}
+
+fun isOdd(n) {
+  if (n == 0) return false;
+  return isEven(n - 1);
+}
+
+print "isEven(4): " + isEven(4);  // 输出: isEven(4): true
+print "isOdd(3): " + isOdd(3);    // 输出: isOdd(3): true
+print ""; 

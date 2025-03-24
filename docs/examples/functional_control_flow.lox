@@ -1,0 +1,80 @@
+// 使用函数闭包实现条件执行
+// 这是一种"延续传递风格"(Continuation-Passing Style, CPS)的实现方式
+
+// 1. 使用函数闭包实现if语句
+var if_statement = function(condition, then_func, else_func) {
+  if (condition) {
+    return then_func();
+  } else {
+    return else_func();
+  }
+};
+
+// 使用示例
+print "使用函数实现条件控制流:";
+var temperature = 25;
+
+if_statement(
+  temperature > 20,
+  function() { print "天气暖和，适合户外活动。"; },
+  function() { print "天气有点冷，注意保暖。"; }
+);
+
+// 2. 使用函数闭包实现while循环
+var while_loop = function(condition_func, body_func) {
+  var iterate = function() {
+    if (condition_func()) {
+      body_func();
+      iterate();
+    }
+  };
+  
+  iterate();
+};
+
+// 使用示例
+print "\n使用函数实现循环控制流:";
+var counter = 1;
+var factorial = 1;
+
+while_loop(
+  function() { return counter <= 5; },
+  function() {
+    factorial = factorial * counter;
+    counter = counter + 1;
+  }
+);
+
+print "5的阶乘是: " + factorial;
+
+// 3. 使用函数闭包实现for循环
+var for_loop = function(init_func, condition_func, update_func, body_func) {
+  init_func();
+  
+  var iterate = function() {
+    if (condition_func()) {
+      body_func();
+      update_func();
+      iterate();
+    }
+  };
+  
+  iterate();
+};
+
+// 使用示例
+print "\n使用函数实现for循环:";
+var sum = 0;
+var i = 0;
+
+for_loop(
+  function() { i = 1; },
+  function() { return i <= 10; },
+  function() { i = i + 1; },
+  function() { sum = sum + i; }
+);
+
+print "1到10的和是: " + sum;
+
+print "\n这种方法称为'延续传递风格'(Continuation-Passing Style)";
+print "它允许在没有内置控制流结构的语言中实现复杂的控制流。"; 

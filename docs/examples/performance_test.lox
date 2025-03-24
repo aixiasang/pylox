@@ -1,0 +1,63 @@
+// 性能测试示例
+
+// 计算从1加到n的函数
+fun sum(n) {
+  var result = 0;
+  for (var i = 1; i <= n; i = i + 1) {
+    result = result + i;
+  }
+  return result;
+}
+
+// 计时函数
+fun time(fn, arg) {
+  var start = clock();
+  var result = fn(arg);
+  var end = clock();
+  print "执行时间: " + (end - start) + "秒";
+  return result;
+}
+
+print "计算1到1000的和";
+var result = time(sum, 1000);
+print "结果: " + result;
+
+// 使用递归计算斐波那契数列
+fun fib(n) {
+  if (n <= 1) return n;
+  return fib(n - 1) + fib(n - 2);
+}
+
+// 计算第20个斐波那契数
+print "计算第20个斐波那契数";
+result = time(fib, 20);
+print "结果: " + result;
+
+// 测试函数参数数量检查的性能影响
+// 创建一个无参数的函数
+fun noArg() {
+  return "noArg";
+}
+
+// 创建一个有5个参数的函数
+fun fiveArgs(a, b, c, d, e) {
+  return a + b + c + d + e;
+}
+
+// 计时多次调用无参数函数
+print "调用无参数函数1000次";
+var start = clock();
+for (var i = 0; i < 1000; i = i + 1) {
+  noArg();
+}
+var end = clock();
+print "执行时间: " + (end - start) + "秒";
+
+// 计时多次调用有参数函数
+print "调用5参数函数1000次";
+start = clock();
+for (var i = 0; i < 1000; i = i + 1) {
+  fiveArgs(1, 2, 3, 4, 5);
+}
+end = clock();
+print "执行时间: " + (end - start) + "秒";

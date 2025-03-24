@@ -1,0 +1,61 @@
+// 挑战1解决方案：参数数量检查和性能问题
+
+/*
+问题：我们的解释器细检查传递给函数的参数数量是否与它期望的参数数量匹配。
+由于此检查是在每次调用时执行的，因此它会带来性能成本。
+Smalltalk 实现没有这个问题。为什么不呢？
+
+解决方案：
+Smalltalk没有检查参数数量，因为它使用消息传递模型而不是函数调用。
+当向一个对象发送消息时，对象会查找对应消息选择器(selector)的方法。
+如果参数数量不匹配，它会寻找能处理这些参数的不同方法。
+
+以下是我们可以实现的几种替代方案：
+*/
+
+// 1. 编译时检查
+// 如果我们有静态类型系统，可以在编译时进行参数检查
+// 但Lox是动态类型语言，所以无法完全在编译时检查
+
+// 2. 使用方法重载（JavaScript风格）
+fun overloaded(a) {
+  if (a == nil) {
+    return "没有参数";
+  }
+  return "一个参数: " + a;
+}
+
+// 3. 可变参数（可选参数默认值）
+// 在我们的Lox中，这需要对解释器进行修改
+// 这是Python风格的解决方案
+fun sum(a, b, c) {
+  if (c == nil) c = 0;
+  if (b == nil) b = 0;
+  return a + b + c; 
+}
+
+// 4. 使用对象字面量传递命名参数
+// 这是JavaScript/Python风格的解决方案
+fun configure(options) {
+  var width = options["width"] == nil ? 100 : options["width"];
+  var height = options["height"] == nil ? 100 : options["height"];
+  var title = options["title"] == nil ? "Default" : options["title"];
+  
+  return "配置: " + width + "x" + height + ", 标题: " + title;
+}
+
+// 性能测试
+fun timeFunction() {
+  var start = clock();
+  var result = 0;
+  
+  // 调用10000次
+  for (var i = 0; i < 10000; i = i + 1) {
+    result = overloaded(i);  
+  }
+  
+  var end = clock();
+  return end - start;
+}
+
+print "参数数量检查花费: " + timeFunction() + "秒";

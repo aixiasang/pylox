@@ -1,0 +1,91 @@
+// 高级Lambda表达式测试
+
+// 1. 返回多层闭包的Lambda
+fun compose(f, g) {
+  return fun(x) {
+    return f(g(x));
+  };
+}
+
+fun addOne(x) { return x + 1; }
+fun double(x) { return x * 2; }
+
+var addOneThenDouble = compose(double, addOne);
+print "1. compose(double, addOne)(5) = " + addOneThenDouble(5);  // 应该是(5+1)*2 = 12
+
+// 2. Lambda递归（使用闭包）
+var factorial = fun(f) {
+  return fun(n) {
+    if (n <= 1) return 1;
+    return n * f(f)(n - 1);
+  };
+}(fun(f) {
+  return fun(n) {
+    if (n <= 1) return 1;
+    return n * f(f)(n - 1);
+  };
+});
+
+print "2. factorial(5) = " + factorial(5);  // 应该是120
+
+// 3. 测试Lambda中的this引用和递归
+var counter = {
+  count: 0,
+  increment: fun() {
+    this.count = this.count + 1;
+    return this.count;
+  }
+};
+
+print "3. counter.increment() = " + counter.increment();  // 应该是1
+print "3. counter.increment() = " + counter.increment();  // 应该是2
+
+// 4. 使用Lambda创建记忆函数
+var memoize = fun(f) {
+  var cache = {};
+  
+  return fun(n) {
+    if (cache[n] != nil) {
+      return cache[n];
+    }
+    
+    var result = f(n);
+    cache[n] = result;
+    return result;
+  };
+};
+
+var slowFib = fun(n) {
+  if (n <= 1) return n;
+  return slowFib(n-1) + slowFib(n-2);
+};
+
+var fastFib = memoize(slowFib);
+
+var start = clock();
+print "4. slowFib(25) = " + slowFib(25);
+var slow = clock() - start;
+print "4. 慢速用时: " + slow + "秒";
+
+start = clock();
+print "4. fastFib(25) = " + fastFib(25);
+var fast = clock() - start;
+print "4. 快速用时: " + fast + "秒";
+print "4. 速度提升: " + (slow / fast) + "倍";
+
+// 5. Lambda与作用域链的测试
+var x = "global";
+
+fun test() {
+  var x = "outer";
+  fun inner() {
+    var x = "inner";
+    return fun() {
+      return x;
+    };
+  }
+  return inner();
+}
+
+var f = test();
+print "5. f() = " + f();  // 应该是"inner"

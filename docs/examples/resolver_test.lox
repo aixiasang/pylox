@@ -1,0 +1,79 @@
+// 解析器和变量绑定测试
+
+// 测试1：基本变量解析
+var a = "outer";
+{
+  print a; // 应该打印"outer"
+  var a = "inner";
+  print a; // 应该打印"inner"
+}
+print a; // 应该打印"outer"
+
+// 测试2：函数中的变量解析
+var x = "global";
+fun outer() {
+  var x = "outer";
+  fun inner() {
+    print x; // 应该打印"outer"
+  }
+  inner();
+}
+outer();
+print x; // 应该打印"global"
+
+// 测试3：闭包和绑定
+var closure_test = "global";
+{
+  fun makeCounter() {
+    var i = 0;
+    fun count() {
+      i = i + 1;
+      print i;
+    }
+    return count;
+  }
+  
+  var counter = makeCounter();
+  counter(); // 应该打印1
+  counter(); // 应该打印2
+  
+  // 这里重新声明closure_test不应影响内部函数的绑定
+  var closure_test = "local";
+}
+
+// 测试4：检测变量初始化
+{
+  // 注释错误情况以避免中断测试
+  // var bad = bad; // 正确的解析器应该报错
+  
+  // 正确情况：在不同作用域中的同名变量
+  var outer_a = "first";
+  {
+    var inner_a = outer_a; // 这引用外部的outer_a
+    print inner_a; // 应该打印"first"
+  }
+}
+
+// 测试5：关键闭包测试（之前解释器实现会出错的案例）
+var a = "global";
+{
+  fun showA() {
+    print a;
+  }
+  
+  showA(); // 应该打印"global"
+  var a = "block";
+  showA(); // 使用解析器后，应该打印"global"而不是"block"
+}
+
+// 测试6：深层嵌套和闭包
+fun make_adder(n) {
+  return fun(x) {
+    return x + n;
+  };
+}
+
+var add5 = make_adder(5);
+var add10 = make_adder(10);
+print add5(3);  // 应该打印8
+print add10(3); // 应该打印13

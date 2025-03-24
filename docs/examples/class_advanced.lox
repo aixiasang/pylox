@@ -1,0 +1,58 @@
+// 高级类测试
+// 方法返回对象自身以支持链式调用
+class Chainable {
+  init(value) {
+    this.value = value;
+  }
+  
+  setValue(value) {
+    this.value = value;
+    return this;
+  }
+  
+  addValue(amount) {
+    this.value = this.value + amount;
+    return this;
+  }
+  
+  getValue() {
+    return this.value;
+  }
+}
+
+var chain = Chainable(5);
+print chain.setValue(10).addValue(2).getValue(); // 应打印: 12
+
+// 类方法中的闭包和变量捕获
+class Counter {
+  init() {
+    this.count = 0;
+  }
+  
+  makeIncrementer() {
+    // 创建一个闭包，捕获this
+    fun increment() {
+      this.count = this.count + 1;
+      return this.count;
+    }
+    
+    return increment;
+  }
+}
+
+var counter = Counter();
+var inc = counter.makeIncrementer();
+print inc(); // 应打印: 1
+print inc(); // 应打印: 2
+print counter.count; // 应打印: 2
+
+// 使用方法作为一等值
+class Greeter {
+  sayHi(name) {
+    print "Hi, " + name + "!";
+  }
+}
+
+var greeter = Greeter();
+var hi = greeter.sayHi;
+hi("Bob"); // 应打印: Hi, Bob!

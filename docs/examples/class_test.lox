@@ -1,0 +1,102 @@
+// 基本类测试
+class Breakfast {
+  init(meat, bread) {
+    this.meat = meat;
+    this.bread = bread;
+  }
+
+  serve() {
+    print "Enjoy your " + this.meat + " with " + this.bread + "!";
+  }
+}
+
+// 创建实例测试
+var breakfast = Breakfast("bacon", "toast");
+breakfast.serve();  // 应该输出: Enjoy your bacon with toast!
+
+// 添加和访问实例属性
+breakfast.side = "hash browns";
+print breakfast.side;  // 应该输出: hash browns
+
+// 类继承测试
+class Brunch < Breakfast {
+  init(meat, bread, drink) {
+    super.init(meat, bread);
+    this.drink = drink;
+  }
+
+  serve() {
+    super.serve();
+    print "And wash it down with some " + this.drink + "!";
+  }
+}
+
+// 测试继承
+var brunch = Brunch("sausage", "english muffin", "mimosa");
+brunch.serve();  
+// 应该输出: 
+// Enjoy your sausage with english muffin!
+// And wash it down with some mimosa!
+
+// 测试方法调用
+class Counter {
+  init() {
+    this.count = 0;
+  }
+
+  increment() {
+    this.count = this.count + 1;
+    return this.count;
+  }
+}
+
+var counter = Counter();
+print counter.increment();  // 应该输出: 1
+print counter.increment();  // 应该输出: 2
+
+// 测试this绑定
+class Person {
+  init(name) {
+    this.name = name;
+  }
+
+  sayHello() {
+    print "Hello, I'm " + this.name + "!";
+  }
+
+  greet(other) {
+    print "Hi " + other.name + ", I'm " + this.name + "!";
+  }
+}
+
+var alice = Person("Alice");
+var bob = Person("Bob");
+alice.sayHello();  // 应该输出: Hello, I'm Alice!
+alice.greet(bob);  // 应该输出: Hi Bob, I'm Alice!
+
+// 测试复杂的继承链
+class A {
+  method() {
+    print "A method";
+  }
+}
+
+class B < A {
+  method() {
+    print "B method";
+    super.method();
+  }
+}
+
+class C < B {
+  method() {
+    print "C method";
+    super.method();
+  }
+}
+
+C().method();  
+// 应该输出:
+// C method
+// B method
+// A method

@@ -1,0 +1,18 @@
+// 返回值测试
+
+fun add(a, b) {
+  return a + b;
+}
+
+// 使用变量存储结果
+var result = add(5, 10);
+print "The result is: " + result;
+
+fun factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
+// 使用变量存储结果
+var fact = factorial(5);
+print "5! = " + fact;

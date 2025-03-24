@@ -1,0 +1,68 @@
+// 参数数量检查性能测试
+
+// 1. 零参数函数
+fun noArg() {
+  return "noArg";
+}
+
+// 2. 一个参数函数
+fun oneArg(a) {
+  return "oneArg: " + a;
+}
+
+// 3. 五个参数函数
+fun fiveArgs(a, b, c, d, e) {
+  return a + b + c + d + e;
+}
+
+// 测试函数调用次数对性能的影响
+print "开始函数调用性能测试:";
+
+// 计时多次调用无参数函数
+var start = clock();
+var result;
+for (var i = 0; i < 10000; i = i + 1) {
+  result = noArg();
+}
+var end = clock();
+print "调用无参数函数10000次: " + (end - start) + "秒";
+
+// 计时多次调用有一个参数函数
+start = clock();
+for (var i = 0; i < 10000; i = i + 1) {
+  result = oneArg(i);
+}
+end = clock();
+print "调用一个参数函数10000次: " + (end - start) + "秒";
+
+// 计时多次调用有五个参数函数
+start = clock();
+for (var i = 0; i < 10000; i = i + 1) {
+  result = fiveArgs(1, 2, 3, 4, 5);
+}
+end = clock();
+print "调用五个参数函数10000次: " + (end - start) + "秒";
+
+// 测试参数检查的开销
+print "检查参数数量错误的开销:";
+
+// 尝试错误参数调用（但在try-catch中捕获错误）
+// 注意：Lox没有try-catch，所以这里只是假想的
+
+print "尝试以错误的参数数量调用函数:";
+// oneArg();  // 应该报错
+// fiveArgs(1, 2);  // 应该报错
+
+// 这是一个Lambda函数，参数数量由调用者决定
+var flexible = fun (a, b) {
+  if (b == nil) {
+    // 只传递了一个参数
+    return "一个参数: " + a;
+  } else {
+    // 传递了两个参数
+    return "两个参数: " + a + ", " + b;
+  }
+};
+
+print flexible(10);  // 这会报错，因为我们的Lox实现检查参数数量
+print flexible(10, 20);

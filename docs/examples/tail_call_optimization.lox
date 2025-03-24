@@ -1,0 +1,55 @@
+// 尾调用优化(Tail Call Optimization, TCO)的实现与演示
+// 
+// 尾调用优化是一种重要的编译器/解释器优化技术，它允许在函数的尾部位置调用另一个
+// 函数时，不会增加调用栈的深度。这对于递归函数特别重要，因为它可以防止栈溢出，
+// 并允许使用递归来表达循环。
+
+// 1. 递归实现阶乘（不使用尾调用优化的版本）
+var factorial_no_tco = function(n) {
+  if (n <= 1) return 1;
+  return n * factorial_no_tco(n - 1);  // 不是尾调用，因为还需要乘以n
+};
+
+// 2. 递归实现阶乘（使用尾调用优化的版本）
+var factorial_tco = function(n) {
+  var factorial_helper = function(n, acc) {
+    if (n <= 1) return acc;
+    return factorial_helper(n - 1, n * acc);  // 尾调用，没有待处理的操作
+  };
+  
+  return factorial_helper(n, 1);
+};
+
+// 3. 使用尾递归实现循环
+var loop_tco = function(start, end, step, func) {
+  if (start > end) return;
+  
+  func(start);
+  return loop_tco(start + step, end, step, func);  // 尾调用
+};
+
+// 演示
+print "尾调用优化(TCO)示例:";
+
+// 计算阶乘
+var n = 5;
+print n + "的阶乘(普通递归): " + factorial_no_tco(n);
+print n + "的阶乘(尾递归): " + factorial_tco(n);
+
+// 使用尾递归模拟循环
+print "\n使用尾递归模拟循环:";
+var sum = 0;
+loop_tco(1, 10, 1, function(i) {
+  sum = sum + i;
+  print "当前i = " + i + ", 和 = " + sum;
+});
+
+// 解释尾调用优化的重要性
+print "\n为什么尾调用优化很重要?";
+print "1. 防止栈溢出：对于大量递归调用，不会耗尽栈空间";
+print "2. 递归表达：可以使用递归来表达原本需要循环的操作";
+print "3. 内存效率：减少内存使用，提高性能";
+print "4. 函数式编程：支持函数式编程中常见的递归模式";
+
+// 注意：在实际的Lox解释器中，可能尚未实现尾调用优化
+// 如果实现了，以上代码即使对非常大的n也能工作而不会栈溢出 

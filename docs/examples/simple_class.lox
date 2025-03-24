@@ -1,0 +1,37 @@
+// 基础类测试
+class Cat {
+  init(name) {
+    this.name = name;
+  }
+
+  sayHello() {
+    print "Meow! I am " + this.name;
+  }
+}
+
+var kitty = Cat("Whiskers");
+kitty.sayHello();
+
+// 测试实例属性修改
+kitty.name = "Fluffy";
+kitty.sayHello();
+
+// 测试添加新属性
+kitty.age = 3;
+print "Age: " + kitty.age;
+
+// 类方法调用
+class Counter {
+  init() {
+    this.count = 0;
+  }
+
+  increment() {
+    this.count = this.count + 1;
+    return this.count;
+  }
+}
+
+var counter = Counter();
+print counter.increment(); // 应打印: 1
+print counter.increment(); // 应打印: 2

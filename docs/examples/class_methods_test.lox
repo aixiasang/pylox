@@ -1,0 +1,72 @@
+// 测试类方法和访问控制
+class BankAccount {
+  init(balance) {
+    this.balance = balance;
+  }
+
+  // 存款方法
+  deposit(amount) {
+    if (amount <= 0) {
+      print "存款金额必须为正数";
+      return false;
+    }
+    this.balance = this.balance + amount;
+    print "存入: " + amount + ", 余额: " + this.balance;
+    return true;
+  }
+
+  // 取款方法
+  withdraw(amount) {
+    if (amount <= 0) {
+      print "取款金额必须为正数";
+      return false;
+    }
+
+    if (amount > this.balance) {
+      print "余额不足";
+      return false;
+    }
+
+    this.balance = this.balance - amount;
+    print "取出: " + amount + ", 余额: " + this.balance;
+    return true;
+  }
+
+  // 获取余额
+  getBalance() {
+    return this.balance;
+  }
+
+  // 转账方法
+  transfer(to, amount) {
+    if (this.withdraw(amount)) {
+      to.deposit(amount);
+      print "转账成功";
+      return true;
+    }
+    print "转账失败";
+    return false;
+  }
+}
+
+// 创建两个账户
+var account1 = BankAccount(1000);
+var account2 = BankAccount(500);
+
+// 测试取款和存款
+account1.deposit(200);
+account1.withdraw(300);
+
+// 测试余额不足情况
+account1.withdraw(2000);
+
+// 测试转账
+account1.transfer(account2, 400);
+
+// 查看两个账户余额
+print "账户1余额: " + account1.getBalance();
+print "账户2余额: " + account2.getBalance();
+
+// 测试方法作为变量
+var getBalance = account1.getBalance;
+print "通过变量调用方法: " + getBalance();

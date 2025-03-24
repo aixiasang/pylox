@@ -1,0 +1,31 @@
+// 简单的函数测试（无返回值版本）
+
+// 基本函数定义与调用
+fun sayHello(name) {
+  print "Hello, " + name + "!";
+}
+
+sayHello("World");
+
+// 使用打印代替返回值
+fun addAndPrint(a, b) {
+  print "Sum is: " + (a + b);
+}
+
+addAndPrint(5, 10);
+
+// 简单作用域测试
+var x = "global";
+
+fun showX() {
+  print "In showX, x = " + x;
+}
+
+fun testScope() {
+  var x = "local";
+  print "In testScope, x = " + x;
+}
+
+showX();
+testScope();
+print "After functions, x = " + x;

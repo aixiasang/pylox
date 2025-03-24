@@ -1,0 +1,74 @@
+// 测试break语句
+
+print "---- break语句测试 ----";
+
+// 1. 简单的while循环中使用break
+print "1. 简单while循环中的break:";
+var i = 0;
+while (i < 10) {
+  print i;
+  i = i + 1;
+  if (i >= 5) {
+    print "遇到break，将跳出循环";
+    break;
+  }
+}
+print "循环结束，最终i = " + i;
+
+// 2. 嵌套循环中使用break
+print "\n2. 嵌套循环中的break:";
+var outer = 1;
+while (outer <= 3) {
+  print "外层循环 " + outer;
+  var inner = 1;
+  
+  while (inner <= 5) {
+    print "  内层循环 " + inner;
+    inner = inner + 1;
+    
+    if (inner == 3) {
+      print "  内层循环遇到break";
+      break;  // 只跳出内层循环
+    }
+  }
+  
+  outer = outer + 1;
+}
+print "嵌套循环结束";
+
+// 3. for循环中使用break
+print "\n3. for循环中的break:";
+var sum = 0;
+var j = 1;
+while (j <= 100) {
+  sum = sum + j;
+  
+  if (sum > 50) {
+    print "和已经超过50，停止累加";
+    break;
+  }
+  
+  j = j + 1;
+}
+print "累加结束，最终和 = " + sum + ", j = " + j;
+
+// 4. 在if-else块中使用break
+print "\n4. 在if-else块中使用break:";
+var k = 0;
+while (k < 10) {
+  k = k + 1;
+  
+  // 检查k是否为偶数
+  var is_even = (k / 2) * 2 == k;
+  
+  if (is_even) {
+    if (k == 6) {
+      print "k等于6，跳出循环";
+      break;
+    }
+    print "k是偶数: " + k;
+  } else {
+    print "k是奇数: " + k;
+  }
+}
+print "循环结束，最终k = " + k; 

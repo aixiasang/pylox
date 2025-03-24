@@ -1,0 +1,107 @@
+// 测试类实现的边界情况
+class Empty {} // 空类
+
+class ThisTest {
+  returnThis() {
+    return this;
+  }
+  
+  getClass() {
+    return this;
+  }
+}
+
+// 测试空类
+var empty = Empty();
+empty.field = "动态添加的字段";
+print empty.field;
+
+// 测试this返回
+var test = ThisTest();
+var sameTest = test.returnThis();
+print sameTest == test; // 应该是true，因为返回的是同一个实例
+
+// 尝试在方法外使用this
+// 这应该会在解析时出错
+// this;
+
+// 测试方法调用链
+class ChainTest {
+  init() {
+    this.value = 0;
+    return this;
+  }
+  
+  add(n) {
+    this.value = this.value + n;
+    return this;
+  }
+  
+  multiply(n) {
+    this.value = this.value * n;
+    return this;
+  }
+  
+  getValue() {
+    return this.value;
+  }
+}
+
+var chain = ChainTest();
+print chain.add(5).multiply(2).add(10).getValue(); // 应该是20
+
+// 测试循环引用
+class Node {
+  init(value) {
+    this.value = value;
+    this.next = nil;
+  }
+  
+  setNext(node) {
+    this.next = node;
+    return this;
+  }
+  
+  getNext() {
+    return this.next;
+  }
+  
+  getValue() {
+    return this.value;
+  }
+}
+
+// 创建循环链表
+var node1 = Node("节点1");
+var node2 = Node("节点2");
+var node3 = Node("节点3");
+
+node1.setNext(node2);
+node2.setNext(node3);
+node3.setNext(node1); // 循环引用
+
+// 遍历循环链表
+var current = node1;
+for (var i = 0; i < 6; i = i + 1) {
+  print current.getValue();
+  current = current.getNext();
+}
+
+// 测试异常情况
+class ExceptionTest {
+  throwError() {
+    // 故意引发错误
+    return this.nonExistentMethod();
+  }
+  
+  callWithTryCatch() {
+    // Lox没有try-catch，但我们可以测试错误传播
+    print "调用可能失败的方法";
+    this.throwError();
+    print "这行应该不会被执行";
+  }
+}
+
+var exTest = ExceptionTest();
+// 这应该会引发运行时错误
+// exTest.callWithTryCatch();

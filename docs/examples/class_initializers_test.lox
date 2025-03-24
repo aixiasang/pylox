@@ -1,0 +1,70 @@
+// 测试构造函数和初始化器链
+class Base {
+  init() {
+    print "Base 初始化";
+    this.value = 10;
+  }
+
+  getValue() {
+    return this.value;
+  }
+}
+
+class Derived < Base {
+  init() {
+    print "Derived 初始化前";
+    super.init();
+    print "Derived 初始化后";
+    this.value = this.value * 2;
+  }
+}
+
+class GrandChild < Derived {
+  init() {
+    print "GrandChild 初始化前";
+    super.init();
+    print "GrandChild 初始化后";
+    this.value = this.value + 5;
+  }
+}
+
+// 测试初始化器链
+print "创建 Base 实例:";
+var base = Base();
+print "Base 值: " + base.getValue();
+
+print "\n创建 Derived 实例:";
+var derived = Derived();
+print "Derived 值: " + derived.getValue();
+
+print "\n创建 GrandChild 实例:";
+var grandChild = GrandChild();
+print "GrandChild 值: " + grandChild.getValue();
+
+// 测试无参构造函数和有参构造函数
+class Point {
+  init() {
+    this.x = 0;
+    this.y = 0;
+    print "创建点 (0, 0)";
+  }
+  
+  init(x, y) {
+    this.x = x;
+    this.y = y;
+    print "创建点 (" + x + ", " + y + ")";
+  }
+  
+  toString() {
+    return "(" + this.x + ", " + this.y + ")";
+  }
+}
+
+// 这应该会失败，因为Lox不支持方法重载
+// 但我们可以测试它的行为
+print "\n测试构造函数重载:";
+var point1 = Point(); 
+var point2 = Point(10, 20);
+
+print "点1: " + point1.toString();
+print "点2: " + point2.toString();

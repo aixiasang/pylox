@@ -1,0 +1,61 @@
+// 测试类继承
+class Animal {
+  init(name) {
+    this.name = name;
+  }
+
+  speak() {
+    return "动物叫声";
+  }
+
+  getName() {
+    return this.name;
+  }
+}
+
+class Dog < Animal {
+  init(name, breed) {
+    super.init(name);
+    this.breed = breed;
+  }
+
+  speak() {
+    return "汪汪!";
+  }
+
+  getBreed() {
+    return this.breed;
+  }
+
+  describe() {
+    return this.getName() + " 是一只 " + this.getBreed() + " 狗";
+  }
+}
+
+var animal = Animal("小动物");
+print animal.getName();
+print animal.speak();
+
+var dog = Dog("旺财", "哈士奇");
+print dog.getName();
+print dog.getBreed();
+print dog.speak();
+print dog.describe();
+
+// 测试继承链
+class Husky < Dog {
+  init(name) {
+    super.init(name, "哈士奇");
+    this.isWorkDog = true;
+  }
+
+  isWorkingDog() {
+    return this.isWorkDog;
+  }
+}
+
+var husky = Husky("雪橇");
+print husky.getName();
+print husky.getBreed();
+print husky.speak();
+print husky.isWorkingDog();

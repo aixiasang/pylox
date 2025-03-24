@@ -1,0 +1,76 @@
+// 未使用变量测试
+
+// 测试1：基本未使用变量
+{
+  var a = 5; // 该变量未使用，应该产生警告
+  var b = 10;
+  print b; // 该变量使用了，不应产生警告
+}
+
+// 测试2：函数参数未使用
+fun test(a, b, c) {
+  print a;
+  print c;
+  // 参数b未使用，应该产生警告
+  return a + c;
+}
+
+test(1, 2, 3);
+
+// 测试3：嵌套作用域中的未使用变量
+{
+  var outer = 10;
+  print outer;
+  
+  {
+    var inner = 20; // 该变量未使用，应该产生警告
+    var used = 30;
+    print used;
+  }
+}
+
+// 测试4：条件语句中的未使用变量
+if (true) {
+  var insideIf = 100; // 该变量未使用，应该产生警告
+} else {
+  var insideElse = 200; // 这个变量实际上不会执行到，但仍应分析
+}
+
+// 测试5：循环中的未使用变量
+for (var i = 0; i < 5; i = i + 1) {
+  var loopVar = i * 2; // 该变量未使用，应该产生警告
+  print i;
+}
+
+// 测试6：函数中的未使用变量
+fun unusedInFunction() {
+  var x = 42; // 该变量未使用，应该产生警告
+  var y = 43;
+  print y;
+}
+
+unusedInFunction();
+
+// 测试7：作为函数返回值的变量
+fun returnTest() {
+  var result = 100; // 该变量被使用作为返回值
+  return result;
+}
+
+print returnTest();
+
+// 测试8：变量在赋值表达式中使用
+{
+  var x = 1;
+  var y = 2;
+  x = y; // 两个变量都被使用了
+  print x;
+}
+
+// 测试9：测试只被赋值但未读取的变量
+{
+  var onlyAssigned = 10;
+  onlyAssigned = 20; // 变量被赋值但从未读取，应该产生警告
+}
+
+print "未使用变量测试完成！";

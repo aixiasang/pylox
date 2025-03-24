@@ -1,0 +1,60 @@
+// 测试作用域和参数问题
+
+// 1. 测试参数和局部变量的作用域关系
+fun scope(a) {
+  print "1. 参数a: " + a;
+  var a = "local";  // 重新定义同名变量
+  print "1. 局部变量a: " + a;
+}
+
+scope("parameter");
+
+// 2. 多层闭包中的变量查找测试
+fun outer(x) {
+  var y = "outer y";
+  fun middle() {
+    var z = "middle z";
+    fun inner() {
+      print "2. x = " + x;
+      print "2. y = " + y;
+      print "2. z = " + z;
+    }
+    return inner;
+  }
+  return middle();
+}
+
+var innerFn = outer("outer x");
+innerFn();
+
+// 3. 递归函数参数作用域
+fun factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
+print "3. 5! = " + factorial(5);
+
+// 4. 参数遮蔽全局变量
+var global = "global";
+
+fun shadow(global) {
+  print "4. 参数覆盖全局变量: " + global;
+}
+
+shadow("parameter");
+print "4. 全局变量不变: " + global;
+
+// 5. 参数在匿名函数中的作用域
+fun makeCounter(start) {
+  return fun() {
+    var result = start;
+    start = start + 1;
+    return result;
+  };
+}
+
+var counter = makeCounter(1);
+print "5. 计数: " + counter();
+print "5. 计数: " + counter();
+print "5. 计数: " + counter();

@@ -1,0 +1,46 @@
+// 变量初始化示例
+
+// 1. 全局变量
+var global = "我是全局变量";
+print global;
+
+// 2. 未初始化变量访问
+var uninit;
+// 下一行会产生运行时错误
+// print uninit;
+
+// 3. 块级作用域
+{
+  // 新的局部变量遮蔽全局变量
+  var global = "我是局部变量";
+  print global;
+  
+  // 另一个嵌套的块
+  {
+    var global = global + "，嵌套修改";
+    print global;
+  }
+  
+  // 回到上一级块
+  print global;
+}
+
+// 回到全局作用域
+print global;
+
+// 4. 块级作用域变量访问
+var a = 1;
+{
+  // 正确：使用外部作用域的'a'初始化块内的新变量'a'
+  var a = a + 2;
+  print a;  // 应该打印 3
+}
+print a;    // 应该打印 1
+
+// 5. 变量赋值
+var x = 10;
+{
+  x = 20;   // 修改外部作用域的变量
+  print x;  // 应该打印 20
+}
+print x;    // 也应该打印 20 

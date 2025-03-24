@@ -1,0 +1,86 @@
+// 复杂的块作用域和变量初始化测试
+
+// 测试1：更复杂的嵌套作用域和函数
+var a = "global";
+
+// 函数内部访问全局变量
+fun showA() {
+  print "in showA, a = " + a;
+}
+
+// 测试函数调用时的作用域
+fun testFunction() {
+  var a = "function";
+  print "in testFunction, a = " + a;
+  
+  // 嵌套作用域
+  {
+    var a = "block in function";
+    print "in block, a = " + a;
+    
+    // 再嵌套一层
+    {
+      print "in nested block, accessing outer a = " + a;
+      var a = "nested block";
+      print "after redefining, a = " + a;
+    }
+    
+    print "back to first block, a = " + a;
+  }
+  
+  print "back to function, a = " + a;
+}
+
+// 测试2：更复杂的变量引用和赋值
+var x = 10;
+var y = 20;
+{
+  var z = x + y;  // 应该使用外部的x和y
+  print "z = " + z;  // 应该输出30
+  
+  var x = x * 2;  // 应该使用外部的x初始化
+  print "inner x = " + x;  // 应该输出20
+  
+  y = y + 5;  // 修改外部的y
+  var y = y + 3;  // 使用更新后的外部y初始化内部y
+  print "inner y = " + y;  // 应该输出28
+}
+
+print "outer x = " + x;  // 应该输出10
+print "outer y = " + y;  // 应该输出25
+
+// 测试3：多层嵌套块与条件
+var i = 1;
+while (i <= 3) {
+  print "loop iteration " + i;
+  
+  if (i == 2) {
+    var i = "shadowed"; // 影子变量
+    print "inside if, i = " + i;
+  }
+  
+  i = i + 1; // 增加外部循环变量
+}
+
+// 测试4：复杂的函数和闭包交互
+fun makeCounter() {
+  var count = 0;
+  
+  fun counter() {
+    count = count + 1;
+    return count;
+  }
+  
+  return counter;
+}
+
+var counter = makeCounter();
+print counter(); // 应该输出1
+print counter(); // 应该输出2
+
+// 调用前面定义的函数
+showA();
+testFunction();
+
+// 最终的全局变量状态
+print "final global a = " + a;

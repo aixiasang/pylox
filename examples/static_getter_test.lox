@@ -1,0 +1,39 @@
+// 测试静态方法和getter方法
+
+class Math {
+  // 静态方法：使用class关键字定义
+  class square(n) {
+    return n * n;
+  }
+  
+  // 静态方法：计算平方根（简化实现）
+  class sqrt(n) {
+    return n / 2; // 这只是一个简化的实现，实际上应该用牛顿迭代法
+  }
+}
+
+// 测试getter方法
+class Circle {
+  init(radius) {
+    this.radius = radius;
+  }
+  
+  // getter方法：直接使用属性名访问，没有括号
+  area {
+    return 3.14159 * this.radius * this.radius;
+  }
+  
+  // 普通方法：计算周长
+  circumference() {
+    return 2 * 3.14159 * this.radius;
+  }
+}
+
+// 测试静态方法
+print Math.square(3); // 应输出 9
+print Math.sqrt(16);  // 应输出 8
+
+// 测试getter方法
+var circle = Circle(4);
+print circle.area;         // 应输出约 50.26
+print circle.circumference(); // 应输出约 25.13

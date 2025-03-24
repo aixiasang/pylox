@@ -1,0 +1,73 @@
+// 测试类中的闭包和this绑定
+class Counter {
+  init(start) {
+    this.count = start;
+  }
+
+  // 返回一个增加计数器的闭包
+  makeIncrementer() {
+    fun increment() {
+      this.count = this.count + 1;
+      return this.count;
+    }
+    return increment;
+  }
+
+  // 创建一个带参数的计数器闭包
+  makeAdder(amount) {
+    fun add() {
+      this.count = this.count + amount;
+      return this.count;
+    }
+    return add;
+  }
+  
+  // 创建一个闭包，返回当前值
+  makeGetter() {
+    fun get() {
+      return this.count;
+    }
+    return get;
+  }
+}
+
+// 基础测试
+var counter = Counter(0);
+var inc = counter.makeIncrementer();
+print inc(); // 应该是1
+print inc(); // 应该是2
+print counter.count; // 应该是2
+
+// 测试多个实例上的闭包
+var counter1 = Counter(10);
+var counter2 = Counter(20);
+
+var inc1 = counter1.makeIncrementer();
+var inc2 = counter2.makeIncrementer();
+
+print inc1(); // 应该是11
+print inc2(); // 应该是21
+print inc1(); // 应该是12
+print inc2(); // 应该是22
+
+// 测试不同类型的闭包
+var c = Counter(0);
+var inc = c.makeIncrementer();
+var add5 = c.makeAdder(5);
+var get = c.makeGetter();
+
+print get(); // 应该是0
+print inc(); // 应该是1
+print add5(); // 应该是6
+print get(); // 应该是6
+
+// 测试闭包在不同上下文中的行为
+fun testScope() {
+  var localCounter = Counter(100);
+  var localInc = localCounter.makeIncrementer();
+  print localInc(); // 应该是101
+  return localInc;
+}
+
+var savedInc = testScope();
+print savedInc(); // 应该是102 - 检查闭包是否仍能访问原对象

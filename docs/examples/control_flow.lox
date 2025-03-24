@@ -1,0 +1,87 @@
+// Lox控制流示例
+
+// 1. 条件执行
+var temperature = 22;
+
+if (temperature > 30) {
+  print "太热了!";
+} else if (temperature > 20) {
+  print "天气不错，正好合适。";
+} else if (temperature > 10) {
+  print "有点凉，穿件外套吧。";
+} else {
+  print "太冷了!";
+}
+
+// 2. 逻辑运算符
+var isRaining = false;
+var isWindy = true;
+
+if (isRaining and isWindy) {
+  print "下雨而且刮风，最好待在室内。";
+} else if (isRaining or isWindy) {
+  print "天气不太好，小心出行。";
+} else {
+  print "天气很好，去散步吧！";
+}
+
+// 短路求值演示
+var x = "原始值";
+false and (x = "不会被赋值");
+print x;  // 仍然是 "原始值"
+
+true or (x = "不会被赋值");
+print x;  // 仍然是 "原始值"
+
+// 3. While 循环
+print "While循环示例:";
+var i = 1;
+var factorial = 1;
+while (i <= 5) {
+  factorial = factorial * i;
+  i = i + 1;
+}
+print "5的阶乘是: " + factorial;
+
+// 4. For 循环
+print "For循环示例:";
+var sum = 0;
+for (var j = 1; j <= 10; j = j + 1) {
+  sum = sum + j;
+}
+print "1到10的和是: " + sum;
+
+// 5. 嵌套循环示例 - 打印乘法表
+print "乘法表(1-5):";
+for (var m = 1; m <= 5; m = m + 1) {
+  var line = "";
+  for (var n = 1; n <= 5; n = n + 1) {
+    line = line + (m * n) + "\t";
+  }
+  print line;
+}
+
+// 6. 复杂条件示例
+var score = 85;
+var hasPassedExam = score >= 60;
+var attendanceRate = 90;
+var hasGoodAttendance = attendanceRate >= 80;
+
+if (hasPassedExam and hasGoodAttendance) {
+  print "恭喜，你已经通过课程!";
+  if (score >= 90) {
+    print "而且成绩优秀!";
+  } else if (score >= 75) {
+    print "成绩良好!";
+  } else {
+    print "成绩及格!";
+  }
+} else {
+  if (!hasPassedExam) {
+    print "未通过考试。";
+  }
+  if (!hasGoodAttendance) {
+    print "出勤率不足。";
+  }
+  print "请继续努力!";
+} 

@@ -1,0 +1,8 @@
+var data = "Hello, world!";
+
+print(data);
+
+var data2 = "Hello, world!";
+
+print(data2);
+
