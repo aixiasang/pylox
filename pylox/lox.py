@@ -17,6 +17,7 @@ from io import StringIO
 import types
 import inspect
 import importlib
+import argparse
 
 # 解决ast命名冲突
 import ast as python_stdlib_ast
@@ -45,6 +46,9 @@ class Lox:
     had_runtime_error = False
     had_warnings = False
     
+    # 调试标志
+    debug_mode = False
+    
     # 解释器实例
     interpreter = None
     
@@ -56,14 +60,18 @@ class Lox:
             cls.interpreter = Interpreter()
     
     @classmethod
-    def run_file(cls, path):
+    def run_file(cls, path, debug=False):
         """
         执行Lox脚本文件
         
         Args:
             path: str, 文件路径
+            debug: bool, 是否启用调试模式
         """
         try:
+            # 设置调试模式
+            cls.debug_mode = debug
+            
             # 重置状态
             cls.had_error = False
             cls.had_runtime_error = False
@@ -75,7 +83,15 @@ class Lox:
             with open(path, 'r', encoding='utf-8') as file:
                 source = file.read()
                 print(f"[执行文件] {path}")
+                
+                if cls.debug_mode:
+                    print("[调试] 开始执行文件...")
+                    
                 cls.run(source)
+                
+                if cls.debug_mode:
+                    print("[调试] 文件执行完成")
+                    
         except FileNotFoundError:
             print(f"错误: 找不到文件 '{path}'", file=sys.stderr)
             sys.exit(65)  # EX_DATAERR
@@ -309,12 +325,19 @@ if __name__ == "__main__":
     
     如果提供一个参数，将其作为文件路径执行
     否则启动交互式解释器
+    
+    命令行参数:
+    -d, --debug: 启用调试模式
     """
     print("Lox Python解释器")
-    if len(sys.argv) > 2:
-        print("用法: python pylox/lox.py [脚本文件]")
-        sys.exit(64)
-    elif len(sys.argv) == 2:
-        Lox.run_file(sys.argv[1])
+    
+    # 处理命令行参数
+    parser = argparse.ArgumentParser(description='Lox解释器')
+    parser.add_argument('script', nargs='?', help='要执行的Lox脚本文件')
+    parser.add_argument('-d', '--debug', action='store_true', help='启用调试模式')
+    args = parser.parse_args()
+    
+    if args.script:
+        Lox.run_file(args.script, args.debug)
     else:
         Lox.run_prompt()

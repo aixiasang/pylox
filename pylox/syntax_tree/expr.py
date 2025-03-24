@@ -419,18 +419,22 @@ class This(Expr):
 
 class Super(Expr):
     """
-    Super表达式节点
+    Super表达式
     
-    表示super关键字访问父类方法。
+    用于访问超类的方法。
+    
+    Attributes:
+        keyword: Token, super关键字标记
+        method: Token, 要访问的方法名标记
     """
     
     def __init__(self, keyword, method):
         """
-        初始化Super表达式节点
+        初始化Super表达式
         
         Args:
-            keyword: Token, super关键字的标记
-            method: Token, 要访问的方法名
+            keyword: Token, super关键字标记
+            method: Token, 要访问的方法名标记
         """
         self.keyword = keyword
         self.method = method
@@ -440,9 +444,9 @@ class Super(Expr):
         接受访问者
         
         Args:
-            visitor: 实现了visit_super_expr方法的访问者
+            visitor: ExprVisitor, 访问者对象
             
         Returns:
-            visitor.visit_super_expr的返回值
+            访问者的返回值
         """
         return visitor.visit_super_expr(self)

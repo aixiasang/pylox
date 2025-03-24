@@ -140,8 +140,14 @@ class Interpreter(Visitor):
         return None
     
     def visit_print_stmt(self, stmt):
-        """访问打印语句"""
+        """访问print语句"""
+        from pylox.lox import Lox
+        
         value = self.evaluate(stmt.expression)
+        
+        if Lox.debug_mode:
+            print(f"[调试] 打印值: {self.stringify(value)}")
+            
         print(self.stringify(value))
         return None
     
@@ -275,7 +281,7 @@ class Interpreter(Visitor):
             return -float(right)
         elif expr.operator.type == TokenType.BANG:
             return not self.is_truthy(right)
-        
+            
         # 不应该到达这里
         return None
     
@@ -396,17 +402,35 @@ class Interpreter(Visitor):
     
     def visit_super_expr(self, expr):
         """访问super表达式"""
+        from pylox.lox import Lox
+        
+        if Lox.debug_mode:
+            print(f"[调试] 处理super表达式: {expr.method.lexeme}")
+        
         # 获取super在环境中的深度
         distance = self.locals.get(expr)
+        
+        if Lox.debug_mode:
+            print(f"[调试] super作用域深度: {distance}")
         
         # 获取超类
         superclass = self.environment.get_at(distance, "super")
         
+        if Lox.debug_mode:
+            print(f"[调试] 获取到超类: {superclass}")
+        
         # 获取this实例（子类实例）
         instance = self.environment.get_at(distance - 1, "this")
         
+        if Lox.debug_mode:
+            print(f"[调试] 获取到实例: {instance}")
+        
         # 在超类中查找方法
         method = superclass.find_method(expr.method.lexeme)
+        
+        if Lox.debug_mode:
+            print(f"[调试] 在超类中查找方法: {expr.method.lexeme}, 结果: {method}")
+        
         if method is None:
             raise RuntimeError(expr.method, f"未定义的属性'{expr.method.lexeme}'。")
         

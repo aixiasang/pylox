@@ -471,9 +471,24 @@ class Resolver(Visitor):
         Returns:
             None
         """
+        from pylox.lox import Lox
+        
         # 检查是否在类中
         if self.current_class == ClassType.NONE:
-            self.lox.error(expr.keyword, "不能在类外部使用'super'。")
+            Lox.error(expr.keyword, "不能在类外部使用'super'。")
+            return None
+        
+        # 检查是否在子类中
+        # 通过检查当前作用域中是否存在"super"变量来判断
+        found_super = False
+        for scope in self.scopes:
+            if "super" in scope:
+                found_super = True
+                break
+        
+        if not found_super:
+            Lox.error(expr.keyword, "不能在没有超类的类中使用'super'。")
+            return None
         
         # 解析super关键字
         self.resolve_local(expr, expr.keyword)
