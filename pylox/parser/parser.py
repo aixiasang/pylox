@@ -9,7 +9,7 @@
 """
 
 from pylox.scanner.token_type import TokenType
-from pylox.syntax_tree import Binary, Grouping, Literal, Unary, Variable, Assign, Logical, Call, Lambda, Super
+from pylox.syntax_tree import Binary, Grouping, Literal, Unary, Variable, Assign, Logical, Call, Lambda, Inner
 from pylox.syntax_tree import Get, Set, This  # 添加新的表达式类型
 from pylox.syntax_tree import Expression, Print, Var, Block, If, While, Break, Function, Return, Class  # 添加Class
 
@@ -563,7 +563,7 @@ class Parser:
         """
         解析基本表达式
         
-        primary → "true" | "false" | "nil" | "this" | NUMBER | STRING | IDENTIFIER | "(" expression ")" | "super" "." IDENTIFIER ;
+        primary → "true" | "false" | "nil" | "this" | NUMBER | STRING | IDENTIFIER | "(" expression ")" | "inner" "." IDENTIFIER ;
 
         Returns:
             Expr: 表达式对象
@@ -580,11 +580,11 @@ class Parser:
         if self.match(TokenType.NUMBER, TokenType.STRING):
             return Literal(self.previous().literal)
             
-        if self.match(TokenType.SUPER):
+        if self.match(TokenType.INNER):
             keyword = self.previous()
-            self.consume(TokenType.DOT, "期望'.'在'super'后。")
-            method = self.consume(TokenType.IDENTIFIER, "期望超类方法名。")
-            return Super(keyword, method)
+            self.consume(TokenType.DOT, "期望'.'在'inner'后。")
+            method = self.consume(TokenType.IDENTIFIER, "期望子类方法名。")
+            return Inner(keyword, method)
             
         if self.match(TokenType.THIS):
             return This(self.previous())

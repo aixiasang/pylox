@@ -493,3 +493,24 @@ class Resolver(Visitor):
         # 解析super关键字
         self.resolve_local(expr, expr.keyword)
         return None
+
+    def visit_inner_expr(self, expr):
+        """
+        访问inner表达式
+        
+        Args:
+            expr: Inner, inner表达式
+            
+        Returns:
+            None
+        """
+        from pylox.lox import Lox
+        
+        # 检查是否在类中
+        if self.current_class == ClassType.NONE:
+            Lox.error(expr.keyword, "不能在类外部使用'inner'。")
+            return None
+        
+        # inner不需要特殊的词法环境，只需解析关键字
+        self.resolve_local(expr, expr.keyword)
+        return None

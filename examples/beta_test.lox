@@ -1,0 +1,26 @@
+// 测试BETA语言风格的方法继承
+
+class Grandparent {
+  method() {
+    print "Grandparent method";
+  }
+}
+
+class Parent < Grandparent {
+  // 不覆盖method
+}
+
+class Child < Parent {
+  method() {
+    print "Child method";
+  }
+}
+
+// 创建Child实例并调用method
+var child = Child();
+child.method();
+
+// 在BETA风格下，应该先调用Grandparent的method，后调用Child的method
+// 预期输出:
+// Grandparent method
+// Child method

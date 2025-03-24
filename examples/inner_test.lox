@@ -1,0 +1,23 @@
+// 测试BETA语言风格的方法查找逻辑
+// 在这个测试中，父类方法会调用子类方法
+
+class Doughnut {
+  cook() {
+    print "Fry until golden brown.";
+    // 父类方法不调用inner了，因为BETA风格本来就是从顶向下调用
+    print "Place in a nice box.";
+  }
+}
+
+class BostonCream < Doughnut {
+  cook() {
+    print "Pipe full of custard and coat with chocolate.";
+  }
+}
+
+BostonCream().cook();
+
+// 预期输出:
+// Fry until golden brown.
+// Place in a nice box.
+// Pipe full of custard and coat with chocolate.

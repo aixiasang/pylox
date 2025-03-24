@@ -570,6 +570,18 @@ class Interpreter(Visitor):
         if isinstance(left, (int, float)) and isinstance(right, (int, float)):
             return
         raise RuntimeError(operator, "操作数必须是数字。")
+    
+    def visit_inner_expr(self, expr):
+        """访问inner表达式"""
+        from pylox.lox import Lox
+        
+        if Lox.debug_mode:
+            print(f"[调试] 处理inner表达式: {expr.method.lexeme}")
+        
+        # 在BETA风格中，inner应该引用子类（如果有的话）
+        # 但当前我们已经在最底层的类中，所以没有子类可以调用
+        # 应该抛出运行时错误
+        raise RuntimeError(expr.keyword, f"不能在最底层类中使用'inner'关键字，没有子类可以调用。")
 
 
 class BreakException(Exception):

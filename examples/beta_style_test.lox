@@ -1,0 +1,40 @@
+// 全面测试BETA模式的方法调用，不使用点调用
+
+// 定义一个祖父类
+class Doughnut {
+  cook() {
+    print "Doughnut.cook: Fry until golden brown.";
+    // 调用子类的cook方法
+    print "Doughnut.cook: End of method";
+  }
+}
+
+// 定义一个父类
+class Cruller < Doughnut {
+  cook() {
+    print "Cruller.cook: Glaze with sugar.";
+    // 调用子类的cook方法
+    print "Cruller.cook: End of method";
+  }
+}
+
+// 定义一个子类
+class BostonCream < Cruller {
+  cook() {
+    print "BostonCream.cook: Pipe full of custard and coat with chocolate.";
+    print "BostonCream.cook: End of method";
+  }
+}
+
+// 创建并调用BostonCream的cook方法
+var cream = BostonCream();
+cream.cook();
+
+// 在BETA风格中，方法调用应当从最上层祖父类开始，依次向下执行所有方法
+// 预期输出:
+// Doughnut.cook: Fry until golden brown.
+// Doughnut.cook: End of method
+// Cruller.cook: Glaze with sugar.
+// Cruller.cook: End of method
+// BostonCream.cook: Pipe full of custard and coat with chocolate.
+// BostonCream.cook: End of method

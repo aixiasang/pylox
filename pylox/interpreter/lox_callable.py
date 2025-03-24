@@ -99,6 +99,14 @@ class LoxFunction(LoxCallable):
             instance = self.closure.get_at(0, "this")
             # 在执行环境中定义this
             environment.define("this", instance)
+            
+            # 为inner()调用添加特殊处理
+            if hasattr(instance, 'klass'):
+                # 创建inner可调用对象
+                inner_func = InnerFunction(instance, self.declaration.name.lexeme)
+                
+                # 将inner作为函数添加到环境中
+                environment.define("inner", inner_func)
         except RuntimeError:
             pass  # 闭包中没有this，忽略
         
@@ -281,4 +289,117 @@ class Clock(LoxCallable):
         Returns:
             str: 函数的字符串表示
         """
-        return "<native fn: clock>" 
+        return "<native fn: clock>"
+
+
+class InnerFunction(LoxCallable):
+    """
+    Inner函数实现
+    
+    用于内部方法查找和调用
+    """
+    
+    def __init__(self, instance, method_name):
+        """
+        初始化Inner函数
+        
+        Args:
+            instance: LoxInstance, 实例对象
+            method_name: str, 当前方法名
+        """
+        self.instance = instance
+        self.method_name = method_name
+        
+    def call(self, interpreter, arguments):
+        """
+        调用子类方法
+        
+        Args:
+            interpreter: Interpreter, 解释器实例
+            arguments: list, 参数列表
+            
+        Returns:
+            调用结果
+        """
+        # 在BETA模型中，inner()不做任何操作，
+        # 因为调用顺序是从父类到子类，子类方法已经执行过了
+        return None
+        
+    def arity(self):
+        """
+        返回所需参数数量
+        
+        Returns:
+            int: 0，因为inner()不接受参数
+        """
+        return 0
+
+
+class BetaStyleMethod(LoxCallable):
+    """
+    BETA风格方法调用
+    
+    实现从祖父类到子类的方法调用链
+    """
+    
+    def __init__(self, method_chain, instance, interpreter):
+        """
+        初始化BETA风格方法
+        
+        Args:
+            method_chain: list, 从祖父类到子类的方法列表
+            instance: LoxInstance, 实例对象
+            interpreter: Interpreter, 解释器实例
+        """
+        self.method_chain = method_chain
+        self.instance = instance
+        self.interpreter = interpreter
+    
+    def call(self, interpreter, arguments):
+        """
+        执行方法调用链
+        
+        Args:
+            interpreter: Interpreter, 解释器实例
+            arguments: list, 参数列表
+            
+        Returns:
+            最后一个方法的返回值
+        """
+        # 按照从祖父类到子类的顺序执行所有方法
+        result = None
+        from pylox.interpreter.interpreter import Return
+        
+        for method in self.method_chain:
+            try:
+                # 绑定方法到实例并调用
+                bound_method = method.bind(self.instance)
+                result = bound_method.call(interpreter, arguments)
+            except Return as ret:
+                # 如果有方法返回值，保存它，但继续执行下一个方法
+                result = ret.value
+        
+        # 返回最后一个方法的结果
+        return result
+    
+    def arity(self):
+        """
+        返回需要的参数数量
+        
+        在BETA风格中，使用第一个方法的参数数量
+        
+        Returns:
+            int: 参数数量
+        """
+        if not self.method_chain:
+            return 0
+        return self.method_chain[0].arity()
+    
+    def __str__(self):
+        """
+        返回方法的字符串表示
+        
+        Returns:
+            str: 方法的字符串表示
+        """
+        return f"<beta-chain method>" 

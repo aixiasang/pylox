@@ -450,3 +450,38 @@ class Super(Expr):
             访问者的返回值
         """
         return visitor.visit_super_expr(self)
+
+
+class Inner(Expr):
+    """
+    Inner表达式
+    
+    用于访问子类的方法，类似Super但方向相反。
+    
+    Attributes:
+        keyword: Token, inner关键字标记
+        method: Token, 要访问的方法名标记
+    """
+    
+    def __init__(self, keyword, method):
+        """
+        初始化Inner表达式
+        
+        Args:
+            keyword: Token, inner关键字标记
+            method: Token, 要访问的方法名标记
+        """
+        self.keyword = keyword
+        self.method = method
+        
+    def accept(self, visitor):
+        """
+        接受访问者
+        
+        Args:
+            visitor: ExprVisitor, 访问者对象
+            
+        Returns:
+            访问者的返回值
+        """
+        return visitor.visit_inner_expr(self)

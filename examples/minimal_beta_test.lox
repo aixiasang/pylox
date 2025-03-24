@@ -1,0 +1,21 @@
+// 最小化BETA测试
+
+class A {
+  method() {
+    print "A.method()";
+  }
+}
+
+class B < A {
+  method() {
+    print "B.method()";
+  }
+}
+
+// 创建B实例并调用method
+var b = B();
+b.method();
+
+// 在BETA风格中，预期输出:
+// A.method()
+// B.method()

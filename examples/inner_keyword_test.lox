@@ -1,0 +1,24 @@
+// 测试inner关键字
+
+class Parent {
+  method() {
+    print "Parent.method()";
+  }
+}
+
+class Child < Parent {
+  method() {
+    print "Child.method() start";
+    inner.method(); // 尝试使用inner.method()调用子类的方法
+    print "Child.method() end";
+  }
+}
+
+// 创建Child实例并调用method
+var child = Child();
+child.method();
+
+// 在BETA风格中，预期输出:
+// Child.method() start
+// 错误：inner关键字应该向下调用，但已经到最底层了
+// Child.method() end

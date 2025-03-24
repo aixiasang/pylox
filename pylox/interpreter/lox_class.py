@@ -63,7 +63,8 @@ class LoxClass(LoxCallable):
         """
         查找实例方法
         
-        首先在当前类中查找，如果找不到则在父类中查找。
+        BETA风格：从继承链顶部开始查找方法。
+        先在超类中查找，如果找不到则在当前类中查找。
         
         Args:
             name: str, 方法名
@@ -71,20 +72,24 @@ class LoxClass(LoxCallable):
         Returns:
             LoxFunction: 方法对象，如果不存在则返回None
         """
+        # 如果有父类，先在父类中查找
+        method = None
+        if self.superclass is not None:
+            method = self.superclass.find_method(name)
+            
+        # 然后查找当前类中的方法，可能会覆盖父类方法
         if name in self.methods:
             return self.methods[name]
             
-        # 如果有父类，在父类中查找
-        if self.superclass is not None:
-            return self.superclass.find_method(name)
-            
-        return None
+        # 返回在父类中找到的方法（如果有）
+        return method
     
     def find_static_method(self, name):
         """
         查找静态方法
         
-        首先在当前类中查找，如果找不到则在父类中查找。
+        BETA风格：从继承链顶部开始查找方法。
+        先在超类中查找，如果找不到则在当前类中查找。
         
         Args:
             name: str, 静态方法名
@@ -92,14 +97,17 @@ class LoxClass(LoxCallable):
         Returns:
             LoxFunction: 静态方法对象，如果不存在则返回None
         """
+        # 如果有父类，先在父类中查找
+        method = None
+        if self.superclass is not None:
+            method = self.superclass.find_static_method(name)
+            
+        # 然后查找当前类中的方法，可能会覆盖父类方法
         if name in self.static_methods:
             return self.static_methods[name]
             
-        # 如果有父类，在父类中查找
-        if self.superclass is not None:
-            return self.superclass.find_static_method(name)
-            
-        return None
+        # 返回在父类中找到的方法（如果有）
+        return method
         
     def arity(self):
         """
@@ -165,24 +173,37 @@ class LoxInstance:
         # 然后查找类中的方法
         method = self.klass.find_method(name.lexeme)
         if method is not None:
-            # 将方法绑定到当前实例
-            method = method.bind(self)
+            # 如果是BETA风格方法调用，应该构建一个方法链
+            # 1. 收集从祖父类到当前类的所有同名方法
+            method_chain = []
+            current_class = self.klass
             
-            # 如果是getter方法，直接执行它
-            if method.is_getter:
-                try:
-                    # 直接调用getter方法，不传递参数
-                    return method.call(interpreter, [])
-                except Exception as e:
-                    # 处理Return异常，这是执行块时抛出的正常异常
-                    from pylox.interpreter.interpreter import Return
-                    if isinstance(e, Return):
-                        return e.value
-                    
-                    # 如果是其他异常，重新抛出
-                    raise
+            # 从当前类向上收集所有方法
+            while current_class is not None:
+                if name.lexeme in current_class.methods:
+                    method_chain.append(current_class.methods[name.lexeme])
+                current_class = current_class.superclass
             
-            return method
+            # 反转列表，使其从祖父类到子类排序
+            method_chain.reverse()
+            
+            # 如果只有一个方法，直接返回它
+            if len(method_chain) == 1:
+                method = method_chain[0].bind(self)
+                # 如果是getter方法，直接执行它
+                if method.is_getter:
+                    try:
+                        return method.call(interpreter, [])
+                    except Exception as e:
+                        from pylox.interpreter.interpreter import Return
+                        if isinstance(e, Return):
+                            return e.value
+                        raise
+                return method
+            else:
+                # 创建一个特殊的复合方法，按顺序调用方法链中的所有方法
+                from pylox.interpreter.lox_callable import BetaStyleMethod
+                return BetaStyleMethod(method_chain, self, interpreter)
         
         # 如果找不到，抛出运行时错误
         raise RuntimeError(name, f"未定义的属性 '{name.lexeme}'。")
