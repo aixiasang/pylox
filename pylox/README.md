@@ -43,8 +43,6 @@ python -m pylox.lox --debug path/to/script.lox
 ## 命令行参数 🛠️
 
 - `--debug`: 启用调试模式，显示更多中间过程信息
-- `--no-resolver`: 跳过变量解析阶段
-- `--ast-print`: 打印解析得到的抽象语法树
 
 ## 错误处理 ⚠️
 

@@ -22,7 +22,9 @@ pylox/
 │   ├── resolver/        # 变量解析
 │   ├── interpreter/     # 解释执行
 │   ├── lox.py           # 入口点
-│   └── error_reporter.py# 错误报告
+│   ├── environment.py   # 环境和作用域管理
+│   ├── cli.py           # 命令行界面
+│   └── __init__.py      # 包初始化
 ├── tests/               # 测试目录
 └── examples/            # 示例程序
 ```
@@ -33,8 +35,11 @@ pylox/
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/pylox.git
+git clone https://github.com/aixiasang/pylox.git
 cd pylox
+
+# 安装依赖
+pip install -e .
 
 # 运行解释器
 python -m pylox.lox [script]
@@ -52,13 +57,13 @@ Hello, World!
 ### 运行脚本
 
 ```bash
-python -m pylox.lox examples/fibonacci.lox
+python -m pylox.lox examples/simple_test.lox
 ```
 
 ### 调试模式
 
 ```bash
-python -m pylox.lox --debug examples/fibonacci.lox
+python -m pylox.lox --debug examples/simple_test.lox
 ```
 
 ## Lox 语言示例 📝

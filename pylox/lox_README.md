@@ -36,8 +36,6 @@ Lox 解释器的完整执行流程:
 - **无参数** - 启动交互式 REPL 环境
 - **文件路径** - 执行指定的 Lox 脚本文件
 - `--debug` - 启用调试模式，显示更多详细信息
-- `--no-resolver` - 跳过变量解析阶段 (仅用于调试)
-- `--ast-print` - 打印解析生成的抽象语法树
 
 ## 异常处理 🚨
 
@@ -69,10 +67,10 @@ Lox 解释器的完整执行流程:
 
 ```bash
 # 基本用法
-python -m pylox.lox examples/hello.lox
+python -m pylox.lox examples/simple_test.lox
 
 # 调试模式
-python -m pylox.lox --debug examples/hello.lox
+python -m pylox.lox --debug examples/simple_test.lox
 ```
 
 ### 交互式 REPL 环境
